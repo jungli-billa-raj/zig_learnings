@@ -15,22 +15,21 @@ const std = @import("std");
 
 pub fn main() !void {
     // Address of a stack variable
-    const name = "Raj";
-    std.debug.print("{*}\n", .{name});
+    var stack_value:u32 = 42; // so you are saying that I cannot allocate a string on the stack? Doesn't seem right. Also, what the hell is static/ read only memeory?
+    std.debug.print("Address of stack_value: {*}\n", .{&stack_value});
 
-    // Address of a heap allocation
+    // Address of heap allocation
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    const allocator = gpa.allocator();
     defer _ = gpa.deinit();
 
-    // I had trouble creating []u8 as the create() does not take a second argument. How am I going to specify the size of the char array I'm trying to init as string. The name 'allocated_name' shows my past endevavours to initialize a string.  
-    const allocated_name = try allocator.create(u8); // I do not understand why this has to be const. I'm clearly modifying it in the very next line. 
-    defer allocator.destroy(allocated_name);
-    // allocated_name.* = "RAJ";
-    allocated_name.* = 123;
+    const allocator = gpa.allocator();
+    const name = try allocator.alloc(u8, 3);
+    defer allocator.free(name);
+    name[0] = 'R';
+    name[1] = 'A';
+    name[2] = 'J';
+    std.debug.print("Address of heap allocated name: {*}\n", .{name});
 
-    std.debug.print("{*}\n", .{allocated_name} );
-    std.debug.print("value of allocated_name is {d}\n", .{allocated_name.*} );
 
     // Process ID
     const pid = std.os.linux.getpid();
