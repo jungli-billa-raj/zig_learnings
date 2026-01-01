@@ -16,6 +16,10 @@ pub fn main() !void {
     //                                 return err;
     //                             };
     // print("Result: {d}\n", .{wrong}); // but this doesn't feel right. Instead of returning I want this print stamtement to not run. 
+    //
+    //
+    // Instead we can use "if".
+    // Yes, in Zig , 'if' can pattern match .
 
     if (mightFail(42)) |result| {
         print("{}\n", .{result});
