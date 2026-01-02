@@ -17,6 +17,7 @@ fn readAndDouble(allocator: std.mem.Allocator, n:usize) tooBigError![]i32 {
 
 const tooBigError = error{
     bigNumber,
+    // OutOfMemory,
 };
 
 pub fn main() !void {
