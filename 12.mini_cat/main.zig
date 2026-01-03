@@ -25,10 +25,16 @@ pub fn main() !void {
 
 
 fn print(allocator:std.mem.Allocator,  address: []const u8) !void {
-    const file = try std.fs.cwd().openFile(address, .{ .mode = .read_only });
+    const file =  std.fs.cwd().openFile(address, .{ .mode = .read_only }) catch |err| {
+        std.debug.print("Error with file: .{s}\nError: .{}\n", .{address, err});
+        return;
+};
     defer file.close();
 
-    const data = try file.readToEndAlloc(allocator, 4*1024);
+    const data = file.readToEndAlloc(allocator, 4*1024) catch |err| {
+        std.debug.print("Error with file: .{s}\nError: .{}\n", .{address, err});
+        return;
+};
     defer allocator.free(data); 
 
     std.debug.print("\n{s}\n", .{data});
