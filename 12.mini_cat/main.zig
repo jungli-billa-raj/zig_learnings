@@ -7,13 +7,30 @@ pub fn main() !void {
     defer args.deinit();
 
     _ = args.skip(); // skip the name of the executable
-    var i:usize = 1;
-    if (args.next() == null) {
+                     
+    const first_arg = args.next() orelse "";
+    if (std.mem.eql(u8, first_arg, "")) {
         std.debug.print("Enter some argument: \n", .{} );
         return;
     }
-    while (args.next())  |arg| : (i += 1) {
-        std.debug.print("{d} : {s}\n", .{i, arg});
+
+    try print(allocator, first_arg);
+        while (true) {
+        if (args.next())  |arg| {
+            try print(allocator, arg);
+        } else return;
     }
     
+}
+
+
+fn print(allocator:std.mem.Allocator,  address: []const u8) !void {
+    const file = try std.fs.cwd().openFile(address, .{ .mode = .read_only });
+    defer file.close();
+
+    const data = try file.readToEndAlloc(allocator, 4*1024);
+    defer allocator.free(data); 
+
+    std.debug.print("\n{s}\n", .{data});
+
 }
