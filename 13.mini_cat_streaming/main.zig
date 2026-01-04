@@ -10,8 +10,6 @@ pub fn main() !void {
                      
     // ------------------------------------------------------------------------------------------------------
     var buffer:[100]u8 = undefined;
-    var fba = std.heap.FixedBufferAllocator.init(&buffer);
-    const fb_allocator = fba.allocator();
 
 
     // ------------------------------------------------------------------------------------------------------
@@ -21,12 +19,10 @@ pub fn main() !void {
         return;
     }
 
-    const memory = try fb_allocator.alloc(u8, 100); 
-    defer fb_allocator.free(memory);
-    try print(memory, first_arg);
+    try print(buffer[0..], first_arg);
         while (true) {
         if (args.next())  |arg| {
-            try print(memory, arg);
+            try print(buffer[0..], arg);
         } else return;
     }
     
