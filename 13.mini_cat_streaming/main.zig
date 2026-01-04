@@ -39,8 +39,8 @@ fn print(buffer: []u8,  address: []const u8) !void {
     while(true) {
         const bytes_read = try file.read(buffer);
         // std.debug.print("{s}", .{buffer[0..]}); // This is wrong. It will always print everything inside the buffer even if the thing read is smaller than the buffer size. There's a good reason why bytes_read return usize, the size of bytes read. 
-        std.debug.print("{s}", .{buffer[0..bytes_read]});
         if (bytes_read == 0) return;
+        std.debug.print("{s}", .{buffer[0..bytes_read]});
     }
 
 
