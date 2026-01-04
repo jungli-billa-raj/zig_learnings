@@ -40,3 +40,13 @@ fn print(allocator:std.mem.Allocator,  address: []const u8) !void {
     std.debug.print("\n{s}\n", .{data});
 
 }
+
+
+// I learnt so much while building this. 
+// I know the code is not perfect at all but I'm happy that it works. 
+// My concerns:
+// 1. I think using page_allocator is a wrong choice here. What if the text is larger than 4KB or however large a page is ?
+// 2. I don't like the idea of reading to end. I prefer reading a certain amount of bytes and writing them stdout until the end of the file is found. However, I've know idea what the end of a file looks like. I mean, I dont' know what to check. 
+// 3. Just by looking at the code, it looks cumbersome and not great. 
+//
+// Nevertheless, I'm happy that I wrote a tool(cat) that I've been using for so long without realizing how it workds. 😝
