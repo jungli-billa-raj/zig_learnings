@@ -10,7 +10,7 @@ pub fn main() !void {
                      
     // ------------------------------------------------------------------------------------------------------
     var buffer:[100]u8 = undefined;
-    var fba = std.heap.FixedBufferAllocator().init(&buffer);
+    var fba = std.heap.FixedBufferAllocator.init(&buffer);
     const fb_allocator = fba.allocator();
 
 
@@ -40,12 +40,13 @@ fn print(buffer: []u8,  address: []const u8) !void {
 };
     defer file.close();
 
-    const data = try file.read(&buffer) catch |err| {
-        std.debug.print("Error with file: .{s}\nError: .{}\n", .{address, err});
-        return;
-};
+    while(true) {
+        const bytes_read = try file.read(buffer);
+        // std.debug.print("{s}", .{buffer[0..]}); // This is wrong. It will always print everything inside the buffer even if the thing read is smaller than the buffer size. There's a good reason why bytes_read return usize, the size of bytes read. 
+        std.debug.print("{s}", .{buffer[0..bytes_read]});
+        if (bytes_read == 0) return;
+    }
 
-    std.debug.print("\n{s}\n", .{data});
 
 }
 
