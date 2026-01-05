@@ -25,7 +25,7 @@ fn print(address: []const u8) !void{
     const file = try std.fs.cwd().openFile(address, .{ .mode = .read_only });
     defer file.close();
 
-    var buffer:[2]u8 = undefined;
+    var buffer:[100]u8 = undefined;
     var word_count:u32 = 0;
     var bytes_count:usize = 0;
     var line_count:u32 = 0; 
