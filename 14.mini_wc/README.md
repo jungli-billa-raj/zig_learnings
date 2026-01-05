@@ -1,6 +1,4 @@
-Nice. Let’s level up with a tool that’s **still small**, **still low-level**, but introduces a *new way of thinking*.
-
-## 🔧 Next tool: **mini-wc**
+## 🔧 **mini-wc**
 
 > Rebuild the core of the Unix `wc` tool.
 
@@ -196,6 +194,4 @@ Natural upgrades (pick later):
 
 ---
 
-When you hit an error or finish version 1, paste your code or output.
-I’ll help you reason, not rewrite.
 
