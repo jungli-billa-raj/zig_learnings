@@ -3,7 +3,7 @@ const std = @import("std");
 pub fn main() !void {
     const allocator = std.heap.page_allocator;
     var args_iterator = try std.process.argsWithAllocator(allocator);
-    defer allocator.free(args_iterator);
+    defer args_iterator.deinit(); 
 
     _ = args_iterator.skip();
 
@@ -21,23 +21,23 @@ pub fn main() !void {
     }
 }
 
-fn print(address: []u8) !void{
+fn print(address: []const u8) !void{
     const file = try std.fs.cwd().openFile(address, .{ .mode = .read_only });
     defer file.close();
 
-    const buffer:[1]u8 = undefined;
-    var word_count:u32 = undefined;
-    var bytes_count:u32 = undefined;
-    var line_count:u32 = undefined; 
+    var buffer:[1]u8 = undefined;
+    var word_count:u32 = 0;
+    var bytes_count:u32 = 0;
+    var line_count:u32 = 0; 
 
     while (true){
-        _ = try file.read(buffer);
-        if (buffer==0) break;
+        const read_byte = try file.read(&buffer);
+        if (read_byte==0) break;
         if (buffer[0]==' ') word_count+=1;
         if (buffer[0]=='\n') line_count+=1;
         bytes_count+=1;
     }
     // <lines> <words> <bytes> README.md
-    std.debug.print(".{d} .{d} .{d} .{s}", .{line_count, word_count, bytes_count, address});
+    std.debug.print("{d} {d} {d} {s}\n", .{line_count, word_count, bytes_count, address});
     return;
 }
