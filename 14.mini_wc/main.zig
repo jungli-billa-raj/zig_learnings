@@ -25,19 +25,31 @@ fn print(address: []const u8) !void{
     const file = try std.fs.cwd().openFile(address, .{ .mode = .read_only });
     defer file.close();
 
-    var buffer:[1]u8 = undefined;
+    var buffer:[2]u8 = undefined;
     var word_count:u32 = 0;
-    var bytes_count:u32 = 0;
+    var bytes_count:usize = 0;
     var line_count:u32 = 0; 
 
+    var in_word:bool = false;
+
     while (true){
-        const read_byte = try file.read(&buffer);
-        if (read_byte==0) break;
-        if (buffer[0]==' ') word_count+=1;
-        if (buffer[0]=='\n') line_count+=1;
-        bytes_count+=1;
+        const n = try file.read(&buffer);
+
+        if (n==0) break;
+        bytes_count += n;
+
+        for (buffer[0..n]) |b| {
+            if (b=='\n') line_count+=1;
+
+            const is_space = b==' ' or b=='\n' or b=='\t';
+            if (!is_space and !in_word) {
+                word_count += 1;
+                in_word = true;
+            } else if (is_space) in_word = false; 
+        }
+
     }
     // <lines> <words> <bytes> README.md
-    std.debug.print("{d} {d} {d} {s}\n", .{line_count, word_count, bytes_count, address});
+    std.debug.print(" {d} {d} {d} {s}\n", .{line_count, word_count, bytes_count, address});
     return;
 }
