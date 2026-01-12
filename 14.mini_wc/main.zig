@@ -33,7 +33,7 @@ fn print(address: []const u8) !void{
     var in_word:bool = false;
 
     while (true){
-        const n = try file.read(&buffer);
+        const n = try file.read(&buffer); // If data comes from the OS, every chunk you request costs a syscall — buffer size controls how often you pay that cost
 
         if (n==0) break;
         bytes_count += n;
