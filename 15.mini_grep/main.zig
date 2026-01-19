@@ -1,8 +1,8 @@
 const std = @import("std");
 
 // fn print(address: []u8, pattern: []u8) !void{
-fn print(address: []u8) !void{
-    const file = std.fs.cwd().openFile(address, .{ .mode = .read_only});
+fn print(address: []const u8) !void{
+    const file = try std.fs.cwd().openFile(address, .{ .mode = .read_only});
     defer file.close();
 
     var read_buf:[4096]u8 = undefined;
@@ -15,9 +15,10 @@ fn print(address: []u8) !void{
         const n = try file.read(&read_buf);
         if (n==0) return;
 
-        for (read_buf[0..n], 0..) |val, i| {
+        // for (read_buf[0..n], 0..) |val, i| {
+        for (read_buf[0..n],) |val| {
             if (val == '\n') {
-                std.debug.print("{s}", .{line_buf[0..i]}); // Should I do [0..line_len] ?? But why? 
+                std.debug.print("{s}", .{line_buf[0..line_len]}); // Should I do [0..line_len] ?? But why? 
                 line_len = 0;
             }
             line_buf[line_len] = val;
