@@ -7,6 +7,8 @@ fn print(address: []u8, pattern: []u8) !void{
     var read_buf:[4096]u8 = undefined;
     var line_buf:[4096]u8 = undefined;
 
+    // Let's try to print each line first.
+
     while (true) {
         const n = try file.read(&read_buf);
         if (n==0) return;
