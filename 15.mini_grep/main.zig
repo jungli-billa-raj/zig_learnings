@@ -1,7 +1,7 @@
 const std = @import("std");
 
 // fn find_pattern(address: []u8, pattern: []u8) !void{
-fn print(address: []const u8, pattern: []const u8) !void{
+fn find_pattern(address: []const u8, pattern: []const u8) !void{
     const file = try std.fs.cwd().openFile(address, .{ .mode = .read_only});
     defer file.close();
 
@@ -16,10 +16,13 @@ fn print(address: []const u8, pattern: []const u8) !void{
         if (n==0) return;
 
         // for (read_buf[0..n], 0..) |val, i| {
-        for (read_buf[0..n],) |val| {
+        for (read_buf[0..n]) |val| {
             if (val == '\n') {
-                std.debug.print("{s}", .{line_buf[0..line_len]}); // Should I do [0..line_len] ?? But why? 
+                if (std.mem.indexOf(u8, line_buf[0..line_len], pattern) != null) {
+                    std.debug.print("{s}\n", .{line_buf[0..line_len]}); 
+                }
                 line_len = 0;
+                continue;
             }
             line_buf[line_len] = val;
             line_len += 1;
