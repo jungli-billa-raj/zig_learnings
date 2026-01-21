@@ -1,7 +1,7 @@
 const std = @import("std");
 
-// fn print(address: []u8, pattern: []u8) !void{
-fn print(address: []const u8) !void{
+// fn find_pattern(address: []u8, pattern: []u8) !void{
+fn print(address: []const u8, pattern: []const u8) !void{
     const file = try std.fs.cwd().openFile(address, .{ .mode = .read_only});
     defer file.close();
 
@@ -40,10 +40,9 @@ pub fn main() !void {
         return;
     }
 
-    try print(first_arg);
     while (true) {
         if (args_iterator.next()) |arg| {
-            try print(arg);
+            try find_pattern(arg, pattern);
         } else return;
     }
 }
