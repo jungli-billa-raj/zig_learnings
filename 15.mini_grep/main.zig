@@ -34,9 +34,9 @@ pub fn main() !void {
 
     _ = args_iterator.skip();
 
-    const first_arg = args_iterator.next() orelse "";
-    if (std.mem.eql(u8, first_arg, "")){
-        std.debug.print("Please enter some argument\n", .{});
+    const pattern = args_iterator.next() orelse "";
+    if (std.mem.eql(u8, pattern, "")){
+        std.debug.print("Usage:\nzig run main.zig -- \"pattern\" filename\n", .{});
         return;
     }
 
